@@ -1,7 +1,7 @@
 services:
   ewm-service:
     build:
-      context: ./stats/stats-client
+      context: ./main
       dockerfile: Dockerfile
     image: explore-stats-service
     container_name: stats-service
