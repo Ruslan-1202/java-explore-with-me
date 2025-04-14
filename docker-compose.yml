@@ -10,7 +10,7 @@ services:
     depends_on:
       - stats-server
     environment:
-      - STATS_SERVER_URL=http://server:9090
+      - STATS_SERVER_URL=http://stats-server:9090
 
   stats-server:
       build:
@@ -23,7 +23,7 @@ services:
       depends_on:
         - stats-db
       environment:
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/stats_db
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats_db
         - SPRING_DATASOURCE_USERNAME=dbuser
         - SPRING_DATASOURCE_PASSWORD=12345
 
