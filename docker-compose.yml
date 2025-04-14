@@ -8,11 +8,11 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - ewm-server
+      - stats-server
     environment:
       - STATS_SERVER_URL=http://server:9090
 
-  ewm-server:
+  stats-server:
       build:
         context: ./stats/stats-server
         dockerfile: Dockerfile
@@ -21,13 +21,13 @@ services:
       ports:
         - "9090:9090"
       depends_on:
-        - ewm-db
+        - stats-db
       environment:
         - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/stats_db
         - SPRING_DATASOURCE_USERNAME=dbuser
         - SPRING_DATASOURCE_PASSWORD=12345
 
-  ewm-db:
+  stats-db:
     image: postgres:16.1
     container_name: stats-postgres
     ports:
