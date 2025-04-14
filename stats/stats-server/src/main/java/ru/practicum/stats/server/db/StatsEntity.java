@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
                            uri,
                            (case :unique
                                 when false then count(id)
-                                else count(distinct ip) 
+                                else count(distinct ip)
                             end) as hits
                         from stats
                     where created between :start and :end
