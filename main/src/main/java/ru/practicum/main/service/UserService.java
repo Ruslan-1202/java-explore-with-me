@@ -2,6 +2,7 @@ package ru.practicum.main.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.db.UserRepository;
 import ru.practicum.main.db.entity.User;
 import ru.practicum.main.dto.UserCreateDTO;
@@ -17,6 +18,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
 
+    @Transactional
     public UserDTO create(UserCreateDTO userCreateDTO) {
         User user = userMapper.userCreateDTOToUser(userCreateDTO, null);
         return userMapper.userToUserDTO(userRepository.save(user));
@@ -37,6 +39,7 @@ public class UserService {
                 .toList();
     }
 
+    @Transactional
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }

@@ -1,17 +1,14 @@
 package ru.practicum.main.db.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "users", schema = "public")
-@Data
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter @Getter @ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
