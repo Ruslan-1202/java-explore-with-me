@@ -22,7 +22,7 @@ public class UserService {
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
-    public List<UserDTO> getUsers(Long[] ids, long from, Long size) {
+    public List<UserDTO> getUsers(Long[] ids, Long from, Long size) {
 
         List<Long> idsList = Arrays.stream(ids).toList();
 
@@ -35,5 +35,9 @@ public class UserService {
         return userRepository.findAll().stream()
                 .map(userMapper::userToUserDTO)
                 .toList();
+    }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 }

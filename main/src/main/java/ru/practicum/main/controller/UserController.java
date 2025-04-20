@@ -31,6 +31,13 @@ public class UserController {
         return userService.getUsers(ids, from, size);
     }
 
+    @DeleteMapping("{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        log.debug("deleteUser: {}", userId);
+        userService.deleteUser(userId);
+    }
+
+//    TODO remove
     @GetMapping(value = "/all")
     public List<UserDTO> getUsersAll() {
         log.debug("getUserAll");
