@@ -9,7 +9,6 @@ import ru.practicum.main.dto.UserCreateDTO;
 import ru.practicum.main.dto.UserDTO;
 import ru.practicum.main.mapper.UserMapper;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,11 +23,8 @@ public class UserService {
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
-    public List<UserDTO> getUsers(Long[] ids, Long from, Long size) {
-
-        List<Long> idsList = Arrays.stream(ids).toList();
-
-        return userRepository.getUsers(idsList, from, size).stream()
+    public List<UserDTO> getUsers(List<Long> ids, Long from, Long size) {
+        return userRepository.getUsers(ids, from, size).stream()
                 .map(userMapper::userToUserDTO)
                 .toList();
     }

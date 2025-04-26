@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDTO> getUsers(@RequestParam(required = false, defaultValue = "") Long[] ids,
+    public List<UserDTO> getUsers(@RequestParam(required = false) List<Long> ids,
                                   @RequestParam(required = false, defaultValue = "0") Long from,
                                   @RequestParam(required = false, defaultValue = "10") Long size) {
         log.debug("getUser: ids={}, from={}, size={}", ids, from, size);
