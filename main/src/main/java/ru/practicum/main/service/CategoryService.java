@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.db.CategoryRepository;
 import ru.practicum.main.db.entity.Category;
+import ru.practicum.main.dto.CategTest;
 import ru.practicum.main.dto.CategoryCreateDTO;
 import ru.practicum.main.dto.CategoryDTO;
 import ru.practicum.main.exception.NotFoundException;
@@ -18,7 +19,7 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
-    private Category getCategoryById(Long id) {
+    public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).
                 orElseThrow(() -> new NotFoundException("Category with id=" + id + " was not found"));
     }
@@ -48,6 +49,8 @@ public class CategoryService {
     }
 
     public List<CategoryDTO> getListCategories(Long from, Long size) {
+        List<CategTest> categories = categoryRepository.getListCategories1();
+
         return categoryRepository.getListCategories(from, size).stream()
                 .map(categoryMapper::toCategoryDTO)
                 .toList();

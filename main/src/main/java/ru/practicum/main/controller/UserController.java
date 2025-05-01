@@ -36,12 +36,12 @@ public class UserController {
     }
 
     @DeleteMapping("{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
         log.debug("deleteUser: {}", userId);
         userService.deleteUser(userId);
     }
 
-//    TODO remove
     @GetMapping(value = "/all")
     public List<UserDTO> getUsersAll() {
         log.debug("getUserAll");

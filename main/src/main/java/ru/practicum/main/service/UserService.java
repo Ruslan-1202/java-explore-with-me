@@ -7,6 +7,7 @@ import ru.practicum.main.db.UserRepository;
 import ru.practicum.main.db.entity.User;
 import ru.practicum.main.dto.UserCreateDTO;
 import ru.practicum.main.dto.UserDTO;
+import ru.practicum.main.exception.NotFoundException;
 import ru.practicum.main.mapper.UserMapper;
 
 import java.util.List;
@@ -38,5 +39,10 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(()-> new NotFoundException("User with id " + userId + " not found"));
     }
 }
