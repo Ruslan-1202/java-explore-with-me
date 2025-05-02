@@ -128,6 +128,12 @@ public class EventService {
                 .toList();
     }
 
+    public List<EventDTO> getEventsByIds(List<Long> eventIds) {
+        return eventRepository.findAllById(eventIds).stream()
+                .map(eventMapper::eventToEventDTO)
+                .toList();
+    }
+
     @Transactional
     public EventDTO editEventByUserIdAndEventId(EventPatchDTO eventPatchDTO, Long userId, Long eventId) {
         var event = getUserEvent(userId, eventId);

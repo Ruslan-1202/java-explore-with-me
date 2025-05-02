@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.main.db.CategoryRepository;
 import ru.practicum.main.db.entity.Category;
-import ru.practicum.main.dto.CategTest;
 import ru.practicum.main.dto.CategoryCreateDTO;
 import ru.practicum.main.dto.CategoryDTO;
 import ru.practicum.main.exception.NotFoundException;
@@ -49,8 +48,6 @@ public class CategoryService {
     }
 
     public List<CategoryDTO> getListCategories(Long from, Long size) {
-        List<CategTest> categories = categoryRepository.getListCategories1();
-
         return categoryRepository.getListCategories(from, size).stream()
                 .map(categoryMapper::toCategoryDTO)
                 .toList();

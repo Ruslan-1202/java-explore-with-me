@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS compilations (
 
 CREATE TABLE IF NOT EXISTS compilation_events (
     compilation_id  INTEGER NOT NULL REFERENCES compilations(id),
-    event_id        INTEGER     NOT NULL REFERENCES events(id),
+    event_id        INTEGER NOT NULL REFERENCES events(id),
     CONSTRAINT pk_compilation_event PRIMARY KEY (compilation_id, event_id)
 );
 CREATE INDEX IF NOT EXISTS idx_compilation_events_compilation_id ON compilation_events(compilation_id);

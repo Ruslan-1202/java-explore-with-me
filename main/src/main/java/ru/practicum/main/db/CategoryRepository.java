@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.main.db.entity.Category;
-import ru.practicum.main.dto.CategTest;
 
 import java.util.List;
 
@@ -21,13 +20,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
                     """
     )
     List<Category> getListCategories(Long from, Long size);
-
-    @Query(
-            nativeQuery = true,
-            value = """
-                    select name
-                        from categories
-                    """
-    )
-    List<CategTest> getListCategories1();
 }
