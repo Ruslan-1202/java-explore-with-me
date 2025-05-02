@@ -46,8 +46,8 @@ public class CompilationController {
 
     @GetMapping("/compilations")
     public List<CompilationDTO> getCompilations(@RequestParam(required = false) Boolean pinned,
-                                               @RequestParam(required = false, defaultValue = "0") Long from,
-                                               @RequestParam(required = false, defaultValue = "10") Long size) {
+                                                @RequestParam(required = false, defaultValue = "0") Long from,
+                                                @RequestParam(required = false, defaultValue = "10") Long size) {
         log.debug("getCompilations: pinned={}, from={}, size={}", pinned, from, size);
         return compilationService.getCompilations(pinned, from, size);
     }
