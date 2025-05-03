@@ -56,3 +56,5 @@ CREATE TABLE IF NOT EXISTS requests (
     status      INTEGER     NOT NULL,
     CONSTRAINT pk_request PRIMARY KEY (id)
 );
+CREATE INDEX IF NOT EXISTS idx_requests_event_id ON requests(event_id);
+CREATE INDEX IF NOT EXISTS idx_requests_user_id ON requests(user_id);

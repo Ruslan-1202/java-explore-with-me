@@ -27,7 +27,7 @@ public class EventService {
     private final UserService userService;
     private final CategoryService categoryService;
 
-    private Event getEventById(Long id) {
+    public Event getEventById(Long id) {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Event id=" + id + " not found"));
     }
@@ -49,6 +49,9 @@ public class EventService {
             event.setDescription(eventPatchDTO.getDescription());
         }
         if (eventPatchDTO.getEventDate() != null) {
+            if (LocalDateTime.now().isAfter(Utils.decodeDateTime(eventPatchDTO.getEventDate()).minusHours(1))) {
+                throw new ConflictException("Wrong event date");
+            }
             event.setEventDate(Utils.decodeDateTime(eventPatchDTO.getEventDate()));
         }
         if (eventPatchDTO.getLocation() != null) {
@@ -73,9 +76,20 @@ public class EventService {
             try {
 
                 if (stateAction.equals("PUBLISH_EVENT")) {
+                    if (!EventState.PENDING.equals(event.getState())) {
+                        throw new ConflictException("Not pending event can't be published");
+                    }
                     state = EventState.PUBLISHED;
+                    event.setPublished(LocalDateTime.now());
                 } else if (stateAction.equals("CANCEL_REVIEW")) {
                     state = EventState.CANCELED;
+                } else if (stateAction.equals("SEND_TO_REVIEW")) {
+                    state = EventState.REVIEW;
+                } else if (stateAction.equals("REJECT_EVENT")) {
+                    if (EventState.PUBLISHED.equals(event.getState())) {
+                        throw new ConflictException("Published event can't be rejected");
+                    }
+                    state = EventState.REJECTED;
                 } else {
                     state = EventState.valueOf(stateAction);
                 }
@@ -99,7 +113,7 @@ public class EventService {
 
     public EventDTO getPublishedEventById(Long id) {
         Event event = getEventById(id);
-        if (event.getPublished() == null) {
+        if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new NotFoundException("Published event id=" + id + " not found");
         }
 
