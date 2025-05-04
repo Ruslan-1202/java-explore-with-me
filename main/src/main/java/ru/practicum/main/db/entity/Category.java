@@ -8,7 +8,9 @@ import lombok.*;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter @Getter @ToString
+@Setter
+@Getter
+@ToString
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

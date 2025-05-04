@@ -30,10 +30,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
             value = """
                     select event_id
                         from event_views
-                        where event_id = :event_id and
+                        where event_id = :eventId and
                               ip = :remoteAddr
                     limit 1
                     """
     )
-    Optional<Long> getViewedIp(Long event_id, String remoteAddr);
+    Optional<Long> getViewedIp(Long eventId, String remoteAddr);
 }

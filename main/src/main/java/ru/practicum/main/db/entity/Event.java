@@ -11,41 +11,43 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter @Getter @ToString(of = {"id", "title"})
+@Setter
+@Getter
+@ToString(of = {"id", "title"})
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long            id;
+    private Long id;
     @Column(name = "annotation", nullable = false)
-    private String          annotation;
+    private String annotation;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Category        category;
+    private Category category;
     @Column(name = "description", nullable = false)
-    private String          description;
+    private String description;
     @Column(name = "event_date")
-    private LocalDateTime   eventDate;
+    private LocalDateTime eventDate;
     @Column(name = "lat", nullable = false)
-    private Double          lat;
+    private Double lat;
     @Column(name = "lon", nullable = false)
-    private Double          lon;
+    private Double lon;
     @Column(name = "paid")
-    private Boolean         paid;
+    private Boolean paid;
     @Column(name = "participant_limit")
-    private Integer         participantLimit;
+    private Integer participantLimit;
     @Column(name = "request_moderation")
-    private Boolean         requestModeration;
+    private Boolean requestModeration;
     @Column(name = "title", nullable = false)
-    private String          title;
+    private String title;
     @ManyToOne(fetch = FetchType.EAGER)
-    private User            user;
+    private User user;
     @Column(name = "created", nullable = false)
-    private LocalDateTime   created;
+    private LocalDateTime created;
     @Enumerated(EnumType.ORDINAL)
     private EventState state;
     @Column(name = "published")
-    private LocalDateTime   published;
+    private LocalDateTime published;
     @Column(name = "views")
-    private Integer         views;
+    private Integer views;
     @Column(name = "confirmed_requests")
-    private Integer         confirmedRequests;
+    private Integer confirmedRequests;
 }

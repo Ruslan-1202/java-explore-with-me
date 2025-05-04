@@ -11,16 +11,18 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter @Getter @ToString
+@Setter
+@Getter
+@ToString
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Event           event;
+    private Event event;
     @ManyToOne(fetch = FetchType.EAGER)
-    private User            user;
-    private LocalDateTime   created;
+    private User user;
+    private LocalDateTime created;
     @Enumerated(EnumType.ORDINAL)
-    private RequestStatus   status;
+    private RequestStatus status;
 }
