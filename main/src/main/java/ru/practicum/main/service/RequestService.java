@@ -129,7 +129,8 @@ public class RequestService {
         } else {
             long remainLimit;
             if (event.getParticipantLimit() != 0) {
-                remainLimit = event.getParticipantLimit() - requestStatusUpdateDTO.getRequestIds().size();
+                int sizeRequests = requestStatusUpdateDTO.getRequestIds().size();
+                remainLimit = event.getParticipantLimit() - event.getConfirmedRequests() - sizeRequests + 1;
             } else {
                 remainLimit = Long.MAX_VALUE;
             }
@@ -141,6 +142,10 @@ public class RequestService {
             idsToReject = requests.stream()
                     .skip(remainLimit)
                     .toList();
+
+            if (!idsToReject.isEmpty()) {
+                throw new ConflictException("Too many ids to confirm");
+            }
         }
 
         requestRepository.setStatus(

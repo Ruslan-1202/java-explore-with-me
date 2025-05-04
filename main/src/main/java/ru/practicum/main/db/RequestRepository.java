@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
-    Optional<Request> findByUserIdAndEventId (long userId, long eventId);
+    Optional<Request> findByUserIdAndEventId(long userId, long eventId);
 
-    List<Request> findByEventId (long eventId);
+    List<Request> findByEventId(long eventId);
 
     Long countByEventIdAndStatus (Long eventId, RequestStatus status);
 
-    List<Request> findByUserId(long userId);
+    List<Request> findByUserId(Long userIds);
 
     @Modifying
     @Query(

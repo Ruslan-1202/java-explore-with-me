@@ -1,6 +1,5 @@
 package ru.practicum.main.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +14,5 @@ public class CompilationPatchDTO {
     private List<Long> events;
     private Boolean pinned;
     @Size(min = 1, max = 50)
-    @NotBlank
     private String title;
 }

@@ -13,7 +13,7 @@ import ru.practicum.main.dto.CompilationAndEventDTO;
                         select  c.id        as compilationId,
                                 c.title     as title,
                                 c.pinned    as pinned,
-                                (select event_id from compilation_events where compilation_id = c.id) as eventIds
+                                (select event_id from compilation_events where compilation_id = c.id limit 1) as eventIds
                             from compilations c
                             where c.id in (:compilationsIds);
                         """
