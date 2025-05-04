@@ -3,7 +3,7 @@ package ru.practicum.main.mapper;
 import org.springframework.stereotype.Service;
 import ru.practicum.main.db.entity.Request;
 import ru.practicum.main.dto.RequestDTO;
-import ru.practicum.stats.server.util.Utils;
+import ru.practicum.main.util.Utils;
 
 @Service
 public class RequestMapper {

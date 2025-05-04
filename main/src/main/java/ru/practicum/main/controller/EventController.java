@@ -70,4 +70,36 @@ public class EventController {
         log.debug("getAllEvents");
         return eventService.getAllEvents();
     }
+
+    @GetMapping("/admin/events")
+    public List<EventDTO> getAdminEvents(@RequestParam(required = false) List<Long> userIds,
+                                         @RequestParam(required = false) List<String> states,
+                                         @RequestParam(required = false) List<Long> categories,
+                                         @RequestParam(required = false) String rangeStart,
+                                         @RequestParam(required = false) String rangeEnd,
+                                         @RequestParam(required = false, defaultValue = "0") int from,
+                                         @RequestParam(required = false, defaultValue = "10") int size) {
+        log.debug("getAdminEvents");
+        return eventService.getAdminEvents(userIds, states, categories, rangeStart, rangeEnd, from, size);
+    }
+
+    @GetMapping("/events")
+    public List<EventDTO> getPublicEvents(@RequestParam(required = false) String text,
+                                          @RequestParam(required = false) List<Long> categories,
+                                          @RequestParam(required = false) Boolean paid,
+                                          @RequestParam(required = false) String rangeStart,
+                                          @RequestParam(required = false) String rangeEnd,
+                                          @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
+                                          @RequestParam(required = false, defaultValue = "0") int from,
+                                          @RequestParam(required = false, defaultValue = "10") int size,
+                                          @RequestParam(required = false, defaultValue = "EVENT_DATE") String sort) {
+        log.debug("getPublicEvents");
+        return eventService.getPublicEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, from, size, sort);
+    }
+
+//    @GetMapping("/some/path/{id}")
+//    public void logIPAndPath(@PathVariable long id, HttpServletRequest request) {
+//        log.info("client ip: {}", request.getRemoteAddr());
+//        log.info("endpoint path: {}", request.getRequestURI());
+//    }
 }

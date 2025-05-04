@@ -7,7 +7,7 @@ import ru.practicum.main.db.entity.Event;
 import ru.practicum.main.db.entity.User;
 import ru.practicum.main.dto.*;
 import ru.practicum.main.enumeration.EventState;
-import ru.practicum.stats.server.util.Utils;
+import ru.practicum.main.util.Utils;
 
 import java.time.LocalDateTime;
 
