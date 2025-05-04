@@ -94,8 +94,9 @@ public class EventController {
                                           @RequestParam(required = false, defaultValue = "false") Boolean onlyAvailable,
                                           @RequestParam(required = false, defaultValue = "0") int from,
                                           @RequestParam(required = false, defaultValue = "10") int size,
-                                          @RequestParam(required = false, defaultValue = "EVENT_DATE") String sort) {
+                                          @RequestParam(required = false, defaultValue = "EVENT_DATE") String sort,
+                                          HttpServletRequest request) {
         log.debug("getPublicEvents");
-        return eventService.getPublicEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, from, size, sort);
+        return eventService.getPublicEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, from, size, sort, request);
     }
 }

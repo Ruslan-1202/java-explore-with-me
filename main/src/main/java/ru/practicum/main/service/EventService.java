@@ -4,13 +4,18 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import ru.practicum.main.db.EventRepository;
 import ru.practicum.main.db.entity.Category;
 import ru.practicum.main.db.entity.Event;
@@ -26,10 +31,13 @@ import ru.practicum.main.exception.NotFoundException;
 import ru.practicum.main.mapper.EventMapper;
 import ru.practicum.main.util.Utils;
 
+import java.io.Serializable;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class EventService {
@@ -38,6 +46,24 @@ public class EventService {
     private final UserService userService;
     private final CategoryService categoryService;
     private final NamedParameterJdbcOperations jdbc;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+    private static final String STATS_SERVER_URL = "http://localhost:9090";
+    private static final String APP = "ewm-main-service";
+
+    private HttpHeaders jsonHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
+    }
+
+    private record StatsCreateDTO(
+            String app,
+            String uri,
+            String ip,
+            LocalDateTime created
+    ) implements Serializable {
+    }
 
     public Event getEventById(Long id) {
         return eventRepository.findById(id)
@@ -131,6 +157,22 @@ public class EventService {
     }
 
     public EventDTO getPublishedEventById(Long id, HttpServletRequest request) {
+        try {
+            StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
+                    APP,
+                    request.getRequestURI(),
+                    request.getRemoteAddr(),
+                    LocalDateTime.now()
+            );
+            restTemplate.postForEntity(
+                    URI.create(STATS_SERVER_URL).resolve("/hit"),
+                    new HttpEntity<>(statsCreateDTO, jsonHeaders()),
+                    Void.class
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
         Event event = getEventById(id);
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new NotFoundException("Published event id=" + id + " not found");
@@ -268,7 +310,23 @@ public class EventService {
                                           Boolean onlyAvailable,
                                           int from,
                                           int size,
-                                          String sortStr) {
+                                          String sortStr,
+                                          HttpServletRequest request) {
+        try {
+            StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
+                    APP,
+                    request.getRequestURI(),
+                    request.getRemoteAddr(),
+                    LocalDateTime.now()
+            );
+            restTemplate.postForEntity(
+                    URI.create(STATS_SERVER_URL).resolve("/hit"),
+                    new HttpEntity<>(statsCreateDTO, jsonHeaders()),
+                    Void.class
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
 
         QEvent event = QEvent.event;
         List<BooleanExpression> conditions = new ArrayList<>();
