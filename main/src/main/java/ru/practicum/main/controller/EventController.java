@@ -1,5 +1,6 @@
 package ru.practicum.main.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class EventController {
     }
 
     @PatchMapping("/admin/events/{id}")
-    public EventDTO editEvent(@RequestBody EventPatchDTO eventPatchDTO,
+    public EventDTO editEvent(@Valid @RequestBody EventPatchDTO eventPatchDTO,
                               @PathVariable Long id) {
 
         log.debug("editEvent eventPatchDTO=[{}], id={}", eventPatchDTO, id);
@@ -37,9 +38,10 @@ public class EventController {
     }
 
     @GetMapping("/events/{id}")
-    public EventDTO getPublishedEventById(@PathVariable Long id) {
-        log.debug("getEventById: id={}", id);
-        return eventService.getPublishedEventById(id);
+    public EventDTO getPublishedEventById(@PathVariable Long id,
+                                          HttpServletRequest request) {
+        log.debug("getEventById: id={}, ip={}, path={}", id, request.getRemoteAddr(), request.getRequestURI());
+        return eventService.getPublishedEventById(id, request);
     }
 
     @GetMapping("/users/{userId}/events")
@@ -96,10 +98,4 @@ public class EventController {
         log.debug("getPublicEvents");
         return eventService.getPublicEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, from, size, sort);
     }
-
-//    @GetMapping("/some/path/{id}")
-//    public void logIPAndPath(@PathVariable long id, HttpServletRequest request) {
-//        log.info("client ip: {}", request.getRemoteAddr());
-//        log.info("endpoint path: {}", request.getRequestURI());
-//    }
 }

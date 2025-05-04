@@ -27,15 +27,19 @@ public class EventMapper {
         event.setLat(eventCreateDTO.getLocation().getLat());
 
         event.setLon(eventCreateDTO.getLocation().getLon());
-        event.setPaid(eventCreateDTO.getPaid());
-        event.setParticipantLimit(eventCreateDTO.getParticipantLimit());
-        event.setRequestModeration(eventCreateDTO.getRequestModeration());
+        event.setPaid(eventCreateDTO.getPaid() != null && eventCreateDTO.getPaid());
+        event.setParticipantLimit(eventCreateDTO.getParticipantLimit() == null ? 0 : eventCreateDTO.getParticipantLimit());
+        event.setRequestModeration(eventCreateDTO.getRequestModeration() == null || eventCreateDTO.getRequestModeration());
         event.setTitle(eventCreateDTO.getTitle());
 
         event.setUser(user);
         event.setCreated(LocalDateTime.now());
-        event.setState(EventState.PENDING);
+
+        EventState eventState = EventState.PENDING;
+
+        event.setState(eventState);
         event.setViews(0);
+        event.setConfirmedRequests(0);
         return event;
     }
 
@@ -49,8 +53,7 @@ public class EventMapper {
         eventDTO.setInitiator(userMapper.userToUserShortDTO(event.getUser()));
         eventDTO.setCategory(categoryMapper.toCategoryDTO(event.getCategory()));
 
-//        TODO
-//        eventDTO.setConfirmedRequests(event.getC
+        eventDTO.setConfirmedRequests(event.getConfirmedRequests());
         eventDTO.setPaid(event.getPaid());
         eventDTO.setParticipantLimit(event.getParticipantLimit());
         eventDTO.setRequestModeration(event.getRequestModeration());

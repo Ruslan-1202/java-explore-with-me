@@ -2,9 +2,7 @@ package ru.practicum.main.enumeration;
 
 public enum EventState {
     PENDING,
-    REVIEW,
     PUBLISHED,
     CONFIRMED,
-    REJECTED,
     CANCELED
 }

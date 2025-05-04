@@ -31,7 +31,12 @@ public class CompilationService {
     }
 
     private List<EventDTO> saveEvents(List<Long> events, Long compilationId) {
-        List<EventDTO> eventDTOList = eventService.getEventsByIds(events);
+        List<EventDTO> eventDTOList = new ArrayList<>();
+        if (events != null && !events.isEmpty()) {
+            eventDTOList = eventService.getEventsByIds(events);
+        } else {
+            events = List.of();
+        }
 
         if (eventDTOList.size() != events.size()) {
             throw new ConflictException("There are events with wrong IDs");
@@ -55,7 +60,6 @@ public class CompilationService {
                 .toArray(SqlParameterSource[]::new);
 
         jdbc.batchUpdate("INSERT INTO compilation_events (compilation_id, event_id) VALUES(:compilation_id, :event_id)", batch);
-
     }
 
     private void deleteCompilationEvents(Long compilationId) {
@@ -125,6 +129,7 @@ public class CompilationService {
         List<Long> eventIds = new ArrayList<>();
         for (CompilationAndEventDTO compilationAndEventDTO : compilationsEvents) {
             if (compilationAndEventDTO.getEventIds() != null) {
+                //  eventIds.addAll(compilationAndEventDTO.getEventIds());
                 eventIds.addAll(Arrays.asList(compilationAndEventDTO.getEventIds()));
             }
         }

@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS events (
     state       INTEGER,
     published   TIMESTAMP WITHOUT TIME ZONE,
     views       INTEGER,
+    confirmed_requests   INTEGER,
     CONSTRAINT pk_event PRIMARY KEY (id)
 );
 
@@ -58,3 +59,9 @@ CREATE TABLE IF NOT EXISTS requests (
 );
 CREATE INDEX IF NOT EXISTS idx_requests_event_id ON requests(event_id);
 CREATE INDEX IF NOT EXISTS idx_requests_user_id ON requests(user_id);
+
+CREATE TABLE IF NOT EXISTS event_views (
+event_id        INTEGER NOT NULL REFERENCES events(id),
+ip              VARCHAR(50) NOT NULL,
+CONSTRAINT pk_event_views PRIMARY KEY (event_id, ip)
+);

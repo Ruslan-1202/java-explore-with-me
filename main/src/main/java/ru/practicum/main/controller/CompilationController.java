@@ -1,5 +1,6 @@
 package ru.practicum.main.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,13 +20,13 @@ public class CompilationController {
 
     @PostMapping("/admin/compilations")
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDTO createCompilation(@RequestBody CompilationCreateDTO compilationCreateDTO) {
+    public CompilationDTO createCompilation(@Valid @RequestBody CompilationCreateDTO compilationCreateDTO) {
         log.debug("createCompilation: {}", compilationCreateDTO);
         return compilationService.createCompilation(compilationCreateDTO);
     }
 
     @PatchMapping("/admin/compilations/{id}")
-    public CompilationDTO editCompilation(@RequestBody CompilationPatchDTO compilationPatchDTO,
+    public CompilationDTO editCompilation(@Valid @RequestBody CompilationPatchDTO compilationPatchDTO,
                                           @PathVariable Long id) {
         log.debug("editCompilation: compilationPatchDTO=[{}], id={}", compilationPatchDTO, id);
         return compilationService.editCompilation(compilationPatchDTO, id);

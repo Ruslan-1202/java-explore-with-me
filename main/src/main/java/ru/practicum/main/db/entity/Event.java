@@ -46,4 +46,6 @@ public class Event {
     private LocalDateTime   published;
     @Column(name = "views")
     private Integer         views;
+    @Column(name = "confirmed_requests")
+    private Integer         confirmedRequests;
 }

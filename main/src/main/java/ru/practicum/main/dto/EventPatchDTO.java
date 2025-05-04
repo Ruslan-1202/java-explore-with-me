@@ -1,5 +1,6 @@
 package ru.practicum.main.dto;
 
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class EventPatchDTO {
     private String eventDate;
     private LocationDTO location;
     private Boolean paid;
+    @PositiveOrZero
     private Integer participantLimit;
     private Boolean requestModeration;
     private String stateAction;

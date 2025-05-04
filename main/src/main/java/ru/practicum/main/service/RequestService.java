@@ -42,7 +42,7 @@ public class RequestService {
             throw new ConflictException(String.format("Event %s is not published", event.getId()));
         }
 
-        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= requestRepository.countByEventId(event.getId())) {
+        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= requestRepository.countByEventIdAndStatus(event.getId(), RequestStatus.CONFIRMED)) {
             throw new ConflictException(String.format("Event %s has reached participant limit of %s", event.getId(), event.getParticipantLimit()));
         }
 
@@ -72,7 +72,7 @@ public class RequestService {
         request.setEvent(event);
         request.setUser(userService.getUserById(userId));
         request.setCreated(LocalDateTime.now());
-        if (!event.getRequestModeration()) {
+        if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
             request.setStatus(RequestStatus.CONFIRMED);
         } else {
             request.setStatus(RequestStatus.PENDING);
@@ -156,6 +156,8 @@ public class RequestService {
                         .toList(),
                 RequestStatus.REJECTED
         );
+
+        event.setConfirmedRequests(event.getConfirmedRequests() + idsToConfirm.size());
 
         return new RequestStatusUpdateResultDTO(
                 idsToConfirm.stream()

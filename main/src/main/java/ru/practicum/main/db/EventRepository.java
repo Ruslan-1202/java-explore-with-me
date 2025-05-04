@@ -24,4 +24,16 @@ public interface EventRepository extends JpaRepository<Event, Long>, QuerydslPre
     List<Event> getEventsByUserId(Long userId, Long from, Long size);
 
     Optional<Event> getEventByIdAndUserId(Long id, Long userId);
+
+    @Query(
+            nativeQuery = true,
+            value = """
+                    select event_id
+                        from event_views
+                        where event_id = :event_id and
+                              ip = :remoteAddr
+                    limit 1
+                    """
+    )
+    Optional<Long> getViewedIp(Long event_id, String remoteAddr);
 }
