@@ -48,7 +48,7 @@ public class EventService {
     private final NamedParameterJdbcOperations jdbc;
 
     private final RestTemplate restTemplate = new RestTemplate();
-//    private static final String STATS_SERVER_URL = "http://localhost:9090";
+    private static final String STATS_SERVER_URL = "http://stats-db:9090";
     private static final String APP = "ewm-main-service";
 
     private HttpHeaders jsonHeaders() {
