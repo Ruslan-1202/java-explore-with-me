@@ -30,8 +30,19 @@ public class StatsService {
 
     @Transactional(readOnly = true)
     public List<StatsRetDTO> getStatsAll(String start, String end, String[] uris, Boolean unique) {
-        LocalDateTime dateTimeStart = Utils.decodeDateTime(start);
-        LocalDateTime dateTimeEnd = Utils.decodeDateTime(end);
+        LocalDateTime dateTimeStart;
+        LocalDateTime dateTimeEnd;
+
+        if (start == null) {
+            dateTimeStart = LocalDateTime.of(1970, 1, 1, 0, 0, 0);
+        } else {
+            dateTimeStart = Utils.decodeDateTime(start);
+        }
+        if (end == null) {
+            dateTimeEnd = LocalDateTime.of(2100, 1, 1, 0, 0, 0);
+        } else {
+            dateTimeEnd = Utils.decodeDateTime(end);
+        }
 
         List<String> uriList = Arrays.stream(uris).toList();
 

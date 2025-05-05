@@ -65,6 +65,18 @@ public class EventService {
     ) implements Serializable {
     }
 
+    private void sendStats(StatsCreateDTO statsCreateDTO) {
+        try {
+            restTemplate.postForEntity(
+                    URI.create(STATS_SERVER_URL).resolve("/hit"),
+                    new HttpEntity<>(statsCreateDTO, jsonHeaders()),
+                    Void.class
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
     public Event getEventById(Long id) {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Event id=" + id + " not found"));
@@ -157,21 +169,14 @@ public class EventService {
     }
 
     public EventDTO getPublishedEventById(Long id, HttpServletRequest request) {
-        try {
-            StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
-                    APP,
-                    request.getRequestURI(),
-                    request.getRemoteAddr(),
-                    LocalDateTime.now()
-            );
-            restTemplate.postForEntity(
-                    URI.create(STATS_SERVER_URL).resolve("/hit"),
-                    new HttpEntity<>(statsCreateDTO, jsonHeaders()),
-                    Void.class
-            );
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
+
+        StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
+                APP,
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now()
+        );
+        sendStats(statsCreateDTO);
 
         Event event = getEventById(id);
         if (!event.getState().equals(EventState.PUBLISHED)) {
@@ -312,21 +317,13 @@ public class EventService {
                                           int size,
                                           String sortStr,
                                           HttpServletRequest request) {
-        try {
-            StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
-                    APP,
-                    request.getRequestURI(),
-                    request.getRemoteAddr(),
-                    LocalDateTime.now()
-            );
-            restTemplate.postForEntity(
-                    URI.create(STATS_SERVER_URL).resolve("/hit"),
-                    new HttpEntity<>(statsCreateDTO, jsonHeaders()),
-                    Void.class
-            );
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-        }
+        StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
+                APP,
+                request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now()
+        );
+        sendStats(statsCreateDTO);
 
         QEvent event = QEvent.event;
         List<BooleanExpression> conditions = new ArrayList<>();
