@@ -51,7 +51,6 @@ public class EventService {
             statClient.addHit(statsCreateDTO);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new BadRequestException(e.getMessage());
         }
     }
 
