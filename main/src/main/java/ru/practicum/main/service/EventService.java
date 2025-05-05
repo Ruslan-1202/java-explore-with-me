@@ -5,18 +5,14 @@ import com.querydsl.core.types.dsl.Expressions;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+import ru.practicum.explore.stats.dto.StatsCreateDTO;
 import ru.practicum.main.db.EventRepository;
 import ru.practicum.main.db.entity.Category;
 import ru.practicum.main.db.entity.Event;
@@ -31,9 +27,8 @@ import ru.practicum.main.exception.ConflictException;
 import ru.practicum.main.exception.NotFoundException;
 import ru.practicum.main.mapper.EventMapper;
 import ru.practicum.main.util.Utils;
+import ru.practicum.stats.client.StatClient;
 
-import java.io.Serializable;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,34 +42,13 @@ public class EventService {
     private final UserService userService;
     private final CategoryService categoryService;
     private final NamedParameterJdbcOperations jdbc;
+    private final StatClient statClient;
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    @Value("${client.url}")
-    private static String STATS_SERVER_URL; // = "http://stats-db:9090";
     private static final String APP = "ewm-main-service";
-
-    private HttpHeaders jsonHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return headers;
-    }
-
-    private record StatsCreateDTO(
-            String app,
-            String uri,
-            String ip,
-            LocalDateTime created
-    ) implements Serializable {
-    }
 
     private void sendStats(StatsCreateDTO statsCreateDTO) {
         try {
-
-            restTemplate.postForEntity(
-                    URI.create(STATS_SERVER_URL).resolve("/hit"),
-                    new HttpEntity<>(statsCreateDTO, jsonHeaders()),
-                    Void.class
-            );
+            statClient.addHit(statsCreateDTO);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new BadRequestException(e.getMessage());
