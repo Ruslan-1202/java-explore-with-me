@@ -26,8 +26,8 @@ public class StatsController {
 
     @GetMapping("/stats")
     public List<StatsRetDTO> getStatsAll(
-            @RequestParam(name = "start", required = false) String start,
-            @RequestParam(name = "end", required = false) String end,
+            @RequestParam(name = "start") String start,
+            @RequestParam(name = "end") String end,
             @RequestParam(name = "uris", required = false, defaultValue = "") String[] uris,
             @RequestParam(name = "unique", required = false, defaultValue = "false") Boolean unique
     ) {
