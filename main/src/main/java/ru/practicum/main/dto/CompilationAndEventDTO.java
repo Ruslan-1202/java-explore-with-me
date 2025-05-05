@@ -9,8 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CompilationAndEventDTO {
     private Long compilationId;
-    private String title;
-    private Boolean pinned;
-
-    private Long[] eventIds;
+    private Long eventId;
 }

@@ -10,6 +10,7 @@ import ru.practicum.main.dto.UserDTO;
 import ru.practicum.main.exception.NotFoundException;
 import ru.practicum.main.mapper.UserMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,6 +26,9 @@ public class UserService {
     }
 
     public List<UserDTO> getUsers(List<Long> ids, Long from, Long size) {
+        if (ids == null || ids.isEmpty()) {
+            ids = new ArrayList<>();
+        }
         return userRepository.getUsers(ids, from, size).stream()
                 .map(userMapper::userToUserDTO)
                 .toList();

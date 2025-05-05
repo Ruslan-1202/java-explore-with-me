@@ -14,7 +14,6 @@ import ru.practicum.main.exception.NotFoundException;
 import ru.practicum.main.mapper.CompilationMapper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -119,6 +118,10 @@ public class CompilationService {
     public List<CompilationDTO> getCompilations(Boolean pinned, Long from, Long size) {
 //        компиляции
         List<Compilation> compilations = compilationRepository.getCompilations(pinned, from, size);
+
+        if (compilations == null || compilations.isEmpty()) {
+            return List.of();
+        }
 //        к этим компиляциям ИД событий
         List<CompilationAndEventDTO> compilationsEvents = compilationRepository.findCompilationsAndEvents(
                 compilations.stream()
@@ -126,23 +129,32 @@ public class CompilationService {
                         .toList()
         );
 //        собираем в кучу ИД событий
-        List<Long> eventIds = new ArrayList<>();
-        for (CompilationAndEventDTO compilationAndEventDTO : compilationsEvents) {
-            if (compilationAndEventDTO.getEventIds() != null) {
-                //  eventIds.addAll(compilationAndEventDTO.getEventIds());
-                eventIds.addAll(Arrays.asList(compilationAndEventDTO.getEventIds()));
-            }
-        }
-//        берем сами события
-        List<EventDTO> events = eventService.getEventsByIds(eventIds);
+        List<EventDTO> eventDTOList = eventService.getEventsByIds(
+                compilationsEvents.stream()
+                        .map(a -> a.getEventId())
+                        .toList()
+        );
 
-        return compilationsEvents.stream()
-                .map(a -> compilationMapper.toCompilationDTOWithEvents(
-                        a,
-                        events.stream()
-                                .filter(b -> b.getId() == a.getCompilationId())
-                                .toList())
-                )
-                .toList();
+        List<CompilationDTO> compilationDTOS = new ArrayList<>();
+        for (Compilation compilation : compilations) {
+//            берем все евентИд для компиляции
+            List<CompilationAndEventDTO> compilationsEventsLoop = compilationsEvents.stream()
+                    .filter(a -> a.getCompilationId().equals(compilation.getId()))
+                    .toList();
+
+//            заполняем евентами
+            List<EventDTO> eventDTOsLoop = new ArrayList<>();
+            for (CompilationAndEventDTO compilationAndEventDTO : compilationsEventsLoop) {
+                eventDTOsLoop.add(eventDTOList.stream()
+                        .filter(event -> event.getId() == compilationAndEventDTO.getEventId())
+                        .findFirst()
+                        .get()
+                );
+            }
+
+            compilationDTOS.add(compilationMapper.toCompilationDTO(compilation, eventDTOsLoop));
+        }
+
+        return compilationDTOS;
     }
 }

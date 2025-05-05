@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             value = """
                     select *
                         from users
-                        where (id in (:ids) or :ids is null)
+                        where (:ids is null or id in (:ids))
                     limit :size offset :from
                     """
     )

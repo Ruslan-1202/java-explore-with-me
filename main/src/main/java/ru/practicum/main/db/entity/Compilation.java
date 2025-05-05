@@ -10,12 +10,10 @@ import ru.practicum.main.dto.CompilationAndEventDTO;
                 resultSetMapping = "Compilation.CompilationAndEventDTO.Mapping",
                 resultClass = CompilationAndEventDTO.class,
                 query = """
-                        select  c.id        as compilationId,
-                                c.title     as title,
-                                c.pinned    as pinned,
-                                (select event_id from compilation_events where compilation_id = c.id limit 1) as eventIds
-                            from compilations c
-                            where c.id in (:compilationsIds);
+                        select  c.compilation_id    as compilationId,
+                                c.event_id          as eventId
+                            from compilation_events c
+                            where c.compilation_id in (:compilationsIds);
                         """
         )
 )
@@ -25,9 +23,7 @@ import ru.practicum.main.dto.CompilationAndEventDTO;
                 classes = @ConstructorResult(targetClass = CompilationAndEventDTO.class,
                         columns = {
                                 @ColumnResult(name = "compilationId", type = Long.class),
-                                @ColumnResult(name = "title", type = String.class),
-                                @ColumnResult(name = "pinned", type = Boolean.class),
-                                @ColumnResult(name = "eventIds", type = Long[].class)
+                                @ColumnResult(name = "eventId", type = Long.class)
                         }
                 )
         )
