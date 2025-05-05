@@ -67,6 +67,7 @@ public class EventService {
 
     private void sendStats(StatsCreateDTO statsCreateDTO) {
         try {
+
             restTemplate.postForEntity(
                     URI.create(STATS_SERVER_URL).resolve("/hit"),
                     new HttpEntity<>(statsCreateDTO, jsonHeaders()),
