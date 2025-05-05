@@ -30,24 +30,24 @@ services:
       interval: 5s
       retries: 10
 
-  stat-service:
+  stat-server:
     build:
       context: ./stats/stats-server
       dockerfile: Dockerfile
     image: explore-stats-service
-    container_name: stats-service
+    container_name: stat-server
     ports:
       - "9090:9090"
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-server:5433/stats_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stat-db:5433/stats_db
       - SPRING_DATASOURCE_USERNAME=dbuser
       - SPRING_DATASOURCE_PASSWORD=12345
 
-  stats-server:
+  stat-db:
     image: postgres:16.1
-    container_name: stats-server
+    container_name: stat-db
     ports:
       - "5433:5433"
     environment:
