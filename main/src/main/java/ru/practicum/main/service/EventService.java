@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -48,7 +49,8 @@ public class EventService {
     private final NamedParameterJdbcOperations jdbc;
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String STATS_SERVER_URL = "http://stats-db:9090";
+    @Value("${client.url}")
+    private static String STATS_SERVER_URL; // = "http://stats-db:9090";
     private static final String APP = "ewm-main-service";
 
     private HttpHeaders jsonHeaders() {
