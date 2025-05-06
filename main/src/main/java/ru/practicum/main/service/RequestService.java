@@ -81,7 +81,7 @@ public class RequestService {
         return requestMapper.toRequestDTO(requestRepository.save(request));
     }
 
-
+    @Transactional
     public RequestDTO cancelRequest(long userId, long requestId) {
         Request request = getRequestById(requestId);
 
@@ -93,12 +93,14 @@ public class RequestService {
         return requestMapper.toRequestDTO(requestRepository.save(request));
     }
 
+    @Transactional(readOnly = true)
     public List<RequestDTO> getRequestsByUser(long userId) {
         return requestRepository.findByUserId(userId).stream()
                 .map(requestMapper::toRequestDTO)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<RequestDTO> getRequestsByUserEvent(long userId, long eventId) {
         getEventUser(userId, eventId);
 
@@ -175,5 +177,4 @@ public class RequestService {
                         .toList()
         );
     }
-
 }

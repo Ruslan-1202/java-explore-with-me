@@ -25,6 +25,7 @@ public class UserService {
         return userMapper.userToUserDTO(userRepository.save(user));
     }
 
+    @Transactional(readOnly = true)
     public List<UserDTO> getUsers(List<Long> ids, Long from, Long size) {
         if (ids == null || ids.isEmpty()) {
             ids = new ArrayList<>();
@@ -34,6 +35,7 @@ public class UserService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<UserDTO> getUsersAll() {
         return userRepository.findAll().stream()
                 .map(userMapper::userToUserDTO)
@@ -45,6 +47,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    @Transactional(readOnly = true)
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id " + userId + " not found"));

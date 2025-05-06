@@ -54,6 +54,7 @@ public class EventService {
         }
     }
 
+    @Transactional(readOnly = true)
     public Event getEventById(Long id) {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Event id=" + id + " not found"));
@@ -64,8 +65,7 @@ public class EventService {
                 .orElseThrow(() -> new NotFoundException("Event id=" + eventId + " by userId=" + userId + " not found"));
     }
 
-
-    public Event patchEvent(Event event, EventPatchDTO eventPatchDTO) {
+    private Event patchEvent(Event event, EventPatchDTO eventPatchDTO) {
         if (eventPatchDTO.getAnnotation() != null) {
             event.setAnnotation(eventPatchDTO.getAnnotation());
         }
@@ -145,6 +145,7 @@ public class EventService {
         }
     }
 
+    @Transactional(readOnly = true)
     public EventDTO getPublishedEventById(Long id, HttpServletRequest request) {
 
         StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
@@ -185,22 +186,26 @@ public class EventService {
         return eventMapper.eventToEventDTO(patchEvent(event, eventPatchDTO));
     }
 
+    @Transactional(readOnly = true)
     public List<EventDTO> getEventsByUserId(Long userId, Long from, Long size) {
         return eventRepository.getEventsByUserId(userId, from, size).stream()
                 .map(eventMapper::eventToEventDTO)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public EventDTO getEventByUserIdAndEventId(Long userId, Long eventId) {
         return eventMapper.eventToEventDTO(getUserEvent(userId, eventId));
     }
 
+    @Transactional(readOnly = true)
     public List<EventDTO> getAllEvents() {
         return eventRepository.findAll().stream()
                 .map(eventMapper::eventToEventDTO)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<EventDTO> getEventsByIds(List<Long> eventIds) {
         if (eventIds == null || eventIds.isEmpty()) {
             return new ArrayList<>();
@@ -223,6 +228,7 @@ public class EventService {
         return eventMapper.eventToEventDTO(patchEvent(event, eventPatchDTO));
     }
 
+    @Transactional(readOnly = true)
     public List<EventDTO> getAdminEvents(List<Long> userIds,
                                          List<String> states,
                                          List<Long> categories,
@@ -284,6 +290,7 @@ public class EventService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<EventDTO> getPublicEvents(String text,
                                           List<Long> categories,
                                           Boolean paid,

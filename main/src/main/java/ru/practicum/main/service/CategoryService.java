@@ -18,6 +18,7 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
     private final CategoryRepository categoryRepository;
 
+    @Transactional(readOnly = true)
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category with id=" + id + " was not found"));
@@ -43,10 +44,12 @@ public class CategoryService {
         return categoryMapper.toCategoryDTO(categoryRepository.save(category));
     }
 
+    @Transactional(readOnly = true)
     public CategoryDTO getCategory(Long id) {
         return categoryMapper.toCategoryDTO(getCategoryById(id));
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryDTO> getListCategories(Long from, Long size) {
         return categoryRepository.getListCategories(from, size).stream()
                 .map(categoryMapper::toCategoryDTO)

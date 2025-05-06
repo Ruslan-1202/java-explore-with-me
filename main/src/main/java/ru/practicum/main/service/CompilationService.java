@@ -83,13 +83,14 @@ public class CompilationService {
         return compilationMapper.toCompilationDTO(compilation, events);
     }
 
-
+    @Transactional
     public void deleteCompilation(Long id) {
         Compilation compilation = getById(id);
         deleteCompilationEvents(id);
         compilationRepository.delete(compilation);
     }
 
+    @Transactional
     public CompilationDTO editCompilation(CompilationPatchDTO compilationPatchDTO, Long id) {
         Compilation compilation = getById(id);
 
@@ -110,11 +111,13 @@ public class CompilationService {
         return compilationMapper.toCompilationDTO(compilation, eventService.getEventsByIds(eventIds));
     }
 
+    @Transactional(readOnly = true)
     public CompilationDTO getCompilationById(Long id) {
         List<Long> eventIds = compilationRepository.getCompilationEventIds(id);
         return compilationMapper.toCompilationDTO(getById(id), eventService.getEventsByIds(eventIds));
     }
 
+    @Transactional(readOnly = true)
     public List<CompilationDTO> getCompilations(Boolean pinned, Long from, Long size) {
 //        компиляции
         List<Compilation> compilations = compilationRepository.getCompilations(pinned, from, size);
