@@ -145,7 +145,7 @@ public class EventService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public EventDTO getPublishedEventById(Long id, HttpServletRequest request) {
 
         StatsCreateDTO statsCreateDTO = new StatsCreateDTO(
