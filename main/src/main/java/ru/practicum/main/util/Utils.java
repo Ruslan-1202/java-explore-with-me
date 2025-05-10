@@ -1,4 +1,4 @@
-package ru.practicum.stats.server.util;
+package ru.practicum.main.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +11,6 @@ public class Utils {
     }
 
     public static LocalDateTime decodeDateTime(String date) {
-       // return LocalDateTime.parse(URLDecoder.decode(date, "UTF-8"), FORMAT_DATE_TIME);
         return LocalDateTime.parse(date, FORMAT_DATE_TIME);
     }
 

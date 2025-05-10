@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.explore.stats.dto.StatsCreateDTO;
 import ru.practicum.explore.stats.dto.StatsRetDTO;
 import ru.practicum.stats.server.db.StatsRepository;
+import ru.practicum.stats.server.exception.BadRequestException;
 import ru.practicum.stats.server.mapper.StatsMapper;
 import ru.practicum.stats.server.util.Utils;
 
@@ -33,6 +34,9 @@ public class StatsService {
         LocalDateTime dateTimeStart = Utils.decodeDateTime(start);
         LocalDateTime dateTimeEnd = Utils.decodeDateTime(end);
 
+        if (dateTimeStart.isAfter(dateTimeEnd)) {
+            throw new BadRequestException("Start date cannot be after end date");
+        }
         List<String> uriList = Arrays.stream(uris).toList();
 
         return statsRepository.findStatsWithHits(dateTimeStart, dateTimeEnd, uriList, unique);
