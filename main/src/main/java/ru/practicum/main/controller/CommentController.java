@@ -56,7 +56,7 @@ public class CommentController {
         commentService.deleteCommentByAdmin(commentId);
     }
 
-    @PatchMapping("/users/{userId}/comments/{commentId}/like/{liked}")
+    @PostMapping("/users/{userId}/comments/{commentId}/like/{liked}")
     public CommentDTO likeComment(@PathVariable long userId,
                                   @PathVariable long commentId,
                                   @PathVariable boolean liked) {

@@ -42,7 +42,7 @@ public class CommentService {
 
     private Comment getUserComment(long userId, long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new NotFoundException("Comment id= " + commentId + " not found"));
+                .orElseThrow(() -> new NotFoundException("Comment id=" + commentId + " not found"));
         User user = userService.getUserById(userId);
 
         if (!comment.getUser().equals(user)) {
@@ -122,7 +122,7 @@ public class CommentService {
 
 
         String updateOrDelete;
-        //повторное действие снимает предыдущее, потому запись удаляем, количесвто уменьшаем
+        //повторное действие снимает предыдущее, потому запись удаляем, количество уменьшаем
         if (likedExists ^ liked) {
             updateOrDelete = "DELETE FROM comment_likes";
             deleteLike(comment, liked);
