@@ -70,8 +70,8 @@ public class EventMapper {
     public EventShortDTO toEventShortDTO(Event event) {
         return new EventShortDTO(
                 event.getId(),
-                Utils.encodeDateTime(event.getEventDate()),
-                Utils.encodeDateTime(event.getPublished()),
+                event.getEventDate(),
+                event.getPublished(),
                 event.getState().toString(),
                 event.getTitle()
         );

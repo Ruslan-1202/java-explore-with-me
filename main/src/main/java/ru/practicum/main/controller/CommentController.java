@@ -15,10 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Validated
+@RequestMapping(value = {"/users", ""})
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/users/{userId}/comments/{eventId}")
+    @PostMapping("/{userId}/comments/{eventId}")
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDTO createComment(@Valid @RequestBody CommentCreateDTO commentCreateDTO,
                                     @PathVariable long userId,
@@ -27,7 +28,8 @@ public class CommentController {
         return commentService.createComment(commentCreateDTO, userId, eventId);
     }
 
-    @PatchMapping("/users/{userId}/comments/{commentId}")
+    @PatchMapping("/{userId}/comments/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
     public CommentDTO editCommentByUser(@Valid @RequestBody CommentPatchDTO commentPatchDTO,
                                         @PathVariable long userId,
                                         @PathVariable long commentId) {
@@ -43,7 +45,7 @@ public class CommentController {
         return commentService.getCommentByEventId(eventId, from, size);
     }
 
-    @DeleteMapping("/users/{userId}/comments/{commentId}")
+    @DeleteMapping("/{userId}/comments/{commentId}")
     public void deleteCommentByUser(@PathVariable long userId,
                                     @PathVariable long commentId) {
         log.debug("deleteCommentByUser: userId={}, commentId={}", userId, commentId);
@@ -56,11 +58,18 @@ public class CommentController {
         commentService.deleteCommentByAdmin(commentId);
     }
 
-    @PostMapping("/users/{userId}/comments/{commentId}/like/{liked}")
+    @PatchMapping("/{userId}/comments/{commentId}")
     public CommentDTO likeComment(@PathVariable long userId,
                                   @PathVariable long commentId,
-                                  @PathVariable boolean liked) {
+                                  @RequestParam boolean liked) {
         log.debug("likeComment: userId={}, commentId={}, liked={}", userId, commentId, liked);
         return commentService.likeComment(userId, commentId, liked);
+    }
+
+    @DeleteMapping("/{userId}/comments/{commentId}")
+    public CommentDTO unLikeComment(@PathVariable long userId,
+                                  @PathVariable long commentId) {
+        log.debug("unLikeComment: userId={}, commentId={}", userId, commentId);
+        return commentService.unLikeComment(userId, commentId);
     }
 }

@@ -3,28 +3,21 @@ package ru.practicum.main.db.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "comments", schema = "public")
+@Table(name = "comment_likes", schema = "public")
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @ToString
-public class Comment {
+public class CommentLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    private Event event;
+    private Comment comment;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-    @Column(length = 512)
-    private String text;
-    private int likes = 0;
-    private int dislikes = 0;
-    private LocalDateTime created;
-    private LocalDateTime modified;
+    private Boolean liked;
 }

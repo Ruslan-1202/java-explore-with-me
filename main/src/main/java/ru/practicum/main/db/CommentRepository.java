@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.main.db.entity.Comment;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
@@ -22,13 +21,20 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> getComments(long eventId, Long from, Long size);
 
     @Query(
-            nativeQuery = true,
             value = """
-                    select is_liked
-                        from comment_likes
-                        where comment_id = :commentId and
-                              user_id    = :userId
+                    update Comment
+                        set likes = likes + :likes
+                        where id = :commentId
                     """
     )
-    Optional<Boolean> getLikes(long userId, long commentId);
+    void addLike(long commentId, int likes);
+
+    @Query(
+            value = """
+                    update Comment
+                        set dislikes = dislikes + :dislikes
+                        where id = :commentId
+                    """
+    )
+    void addDisLike(long commentId, int dislikes);
 }

@@ -29,19 +29,6 @@ public class CommentMapper {
         );
     }
 
-//    public Comment toCommentFromPatchDTO(CommentPatchDTO commentPatchDTO, User user, Event event) {
-//        return new Comment(
-//                null,
-//                event,
-//                user,
-//                commentPatchDTO.getText(),
-//                0,
-//                0,
-//                LocalDateTime.now(),
-//                LocalDateTime.now()
-//        );
-//    }
-
     public CommentDTO toCommentDTO(Comment comment) {
         return new CommentDTO(
                 comment.getId(),

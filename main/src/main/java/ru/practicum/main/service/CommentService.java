@@ -1,7 +1,6 @@
 package ru.practicum.main.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +25,7 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final EventService eventService;
     private final UserService userService;
+    private final CommentLikeService commentLikeService;
     private final NamedParameterJdbcOperations jdbc;
 
     private CommentDTO editComment(CommentPatchDTO commentPatchDTO, Comment comment) {
@@ -41,8 +41,7 @@ public class CommentService {
     }
 
     private Comment getUserComment(long userId, long commentId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new NotFoundException("Comment id=" + commentId + " not found"));
+        Comment comment = getCommentById(commentId);
         User user = userService.getUserById(userId);
 
         if (!comment.getUser().equals(user)) {
@@ -51,7 +50,7 @@ public class CommentService {
         return comment;
     }
 
-    public Comment getCommentById(long commentId) {
+    private Comment getCommentById(long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment id= " + commentId + " not found"));
     }
@@ -82,10 +81,10 @@ public class CommentService {
     }
 
     private void deleteComment(Comment comment) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("commentId", comment.getId());
-
-        jdbc.update("DELETE FROM comment_likes WHERE comment_id = :commentId", params);
+//        MapSqlParameterSource params = new MapSqlParameterSource();
+//        params.addValue("commentId", comment.getId());
+//
+//        jdbc.update("DELETE FROM comment_likes WHERE comment_id = :commentId", params);
         commentRepository.delete(comment);
     }
 
@@ -103,63 +102,19 @@ public class CommentService {
             throw new ConflictException("Don't like your comment");
         }
 
-        Boolean likedExists = commentRepository.getLikes(userId, commentId)
-                .orElse(null);
+        User user = userService.getUserById(userId);
 
-        if (likedExists == null) {
-            insertLike(userId, commentId, liked, comment);
-        } else {
-            updateLike(userId, commentId, liked, likedExists, comment);
-        }
+        commentLikeService.setLike(liked, user, comment);
 
-        return commentMapper.toCommentDTO(commentRepository.save(comment));
+        return commentMapper.toCommentDTO(getCommentById(commentId));
     }
 
-    private void updateLike(long userId, long commentId, boolean liked, boolean likedExists, Comment comment) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("commentId", commentId);
-        params.addValue("userId", userId);
+    @Transactional
+    public CommentDTO unLikeComment(long userId, long commentId) {
+        Comment comment = getCommentById(commentId);
+        User user = userService.getUserById(userId);
 
-
-        String updateOrDelete;
-        //повторное действие снимает предыдущее, потому запись удаляем, количество уменьшаем
-        if (likedExists ^ liked) {
-            updateOrDelete = "DELETE FROM comment_likes";
-            deleteLike(comment, liked);
-        } else {
-            updateOrDelete = "UPDATE comment_likes SET is_liked = :liked";
-            params.addValue("liked", liked);
-
-            setLike(comment, liked);
-            deleteLike(comment, !liked);
-        }
-
-        String query = updateOrDelete + " WHERE comment_id=:commentId and user_id=:userId";
-        jdbc.update(query, params);
-    }
-
-    private void insertLike(long userId, long commentId, boolean liked, Comment comment) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("commentId", commentId);
-        params.addValue("userId", userId);
-        params.addValue("liked", liked);
-        setLike(comment, liked);
-        jdbc.update("INSERT INTO comment_likes (comment_id, user_id, is_liked) VALUES(:commentId, :userId, :liked)", params);
-    }
-
-    private void setLike(Comment comment, boolean liked) {
-        if (liked) {
-            comment.setLikes(comment.getLikes() + 1);
-        } else {
-            comment.setDislikes(comment.getDislikes() + 1);
-        }
-    }
-
-    private void deleteLike(Comment comment, boolean liked) {
-        if (liked) {
-            comment.setLikes(comment.getLikes() - 1);
-        } else {
-            comment.setDislikes(comment.getDislikes() - 1);
-        }
+        commentLikeService.deleteLike(user, comment);
+        return new CommentDTO();
     }
 }
