@@ -84,5 +84,5 @@ CREATE TABLE IF NOT EXISTS comment_likes (
     comment_id      INTEGER NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
     user_id         INTEGER NOT NULL REFERENCES users(id),
     liked           BOOLEAN NOT NULL,
-    CONSTRAINT pk_comment_user PRIMARY KEY (comment_id, user_id)
+    CONSTRAINT pk_comment_user PRIMARY KEY (id)
 );
