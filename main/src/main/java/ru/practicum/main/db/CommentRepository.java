@@ -1,25 +1,21 @@
 package ru.practicum.main.db;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.practicum.main.db.entity.Comment;
 
-import java.util.List;
-
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query(
-            nativeQuery = true,
-            value = """
-                    select *
-                        from comments
-                        where event_id = :eventId
-                    limit :size offset :from
-                    """
-    )
-    List<Comment> getComments(long eventId, Long from, Long size);
 
+    @EntityGraph(attributePaths = {"event", "user"})
+    Page<Comment> findAllByEventId(long eventId, Pageable pageable);
+
+    @Modifying
     @Query(
             value = """
                     update Comment
@@ -29,9 +25,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     )
     void addLike(long commentId, int likes);
 
+    @Modifying
     @Query(
+            nativeQuery = true,
             value = """
-                    update Comment
+                    update comments
                         set dislikes = dislikes + :dislikes
                         where id = :commentId
                     """

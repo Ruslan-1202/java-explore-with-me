@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.main.dto.*;
+import ru.practicum.main.dto.CommentCreateDTO;
+import ru.practicum.main.dto.CommentDTO;
+import ru.practicum.main.dto.CommentPatchDTO;
 import ru.practicum.main.service.CommentService;
 
 import java.util.List;
@@ -39,8 +41,8 @@ public class CommentController {
 
     @GetMapping("/comments/{eventId}")
     public List<CommentDTO> getCommentByEventId(@PathVariable long eventId,
-                                                @RequestParam(required = false, defaultValue = "0") Long from,
-                                                @RequestParam(required = false, defaultValue = "10") Long size) {
+                                                @RequestParam(required = false, defaultValue = "0") int from,
+                                                @RequestParam(required = false, defaultValue = "10") int size) {
         log.debug("getCommentByEventId: eventId={}, from={}, size={}", eventId, from, size);
         return commentService.getCommentByEventId(eventId, from, size);
     }
@@ -58,7 +60,7 @@ public class CommentController {
         commentService.deleteCommentByAdmin(commentId);
     }
 
-    @PatchMapping("/{userId}/comments/{commentId}")
+    @PatchMapping("/{userId}/comment-like/{commentId}")
     public CommentDTO likeComment(@PathVariable long userId,
                                   @PathVariable long commentId,
                                   @RequestParam boolean liked) {
@@ -66,9 +68,9 @@ public class CommentController {
         return commentService.likeComment(userId, commentId, liked);
     }
 
-    @DeleteMapping("/{userId}/comments/{commentId}")
+    @DeleteMapping("/{userId}/comment-like/{commentId}")
     public CommentDTO unLikeComment(@PathVariable long userId,
-                                  @PathVariable long commentId) {
+                                    @PathVariable long commentId) {
         log.debug("unLikeComment: userId={}, commentId={}", userId, commentId);
         return commentService.unLikeComment(userId, commentId);
     }

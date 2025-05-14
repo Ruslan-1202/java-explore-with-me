@@ -121,12 +121,12 @@
 								{
 									"key": "userId",
 									"value": "{{userId}}",
-									"type": "text"
+									"type": "string"
 								},
 								{
 									"key": "eventId",
 									"value": "{{eventId}}",
-									"type": "text"
+									"type": "string"
 								}
 							]
 						},
@@ -193,7 +193,7 @@
 						}
 					],
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -214,17 +214,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/{{userId}}/comments/{{commentId}}/like/{{liked}}",
+							"raw": "{{baseUrl}}/users/{{userId}}/comment-like/{{commentId}}?liked={{liked}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"{{userId}}",
-								"comments",
-								"{{commentId}}",
-								"like",
-								"{{liked}}"
+								"comment-like",
+								"{{commentId}}"
+							],
+							"query": [
+								{
+									"key": "liked",
+									"value": "{{liked}}"
+								}
 							]
 						},
 						"description": "Обратите внимание: дата и время на которые намечено событие не может быть раньше, чем через два часа от текущего момента"
@@ -304,7 +308,7 @@
 						}
 					],
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -325,17 +329,21 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/{{userId}}/comments/{{commentId}}/like/{{liked}}",
+							"raw": "{{baseUrl}}/users/{{userId}}/comment-like/{{commentId}}?liked={{liked}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"{{userId}}",
-								"comments",
-								"{{commentId}}",
-								"like",
-								"{{liked}}"
+								"comment-like",
+								"{{commentId}}"
+							],
+							"query": [
+								{
+									"key": "liked",
+									"value": "{{liked}}"
+								}
 							]
 						},
 						"description": "Обратите внимание: дата и время на которые намечено событие не может быть раньше, чем через два часа от текущего момента"
