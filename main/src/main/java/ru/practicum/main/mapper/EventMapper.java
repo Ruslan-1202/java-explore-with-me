@@ -66,4 +66,14 @@ public class EventMapper {
         eventDTO.setCreatedOn(Utils.encodeDateTime(event.getCreated()));
         return eventDTO;
     }
+
+    public EventShortDTO toEventShortDTO(Event event) {
+        return new EventShortDTO(
+                event.getId(),
+                event.getEventDate(),
+                event.getPublished(),
+                event.getState().toString(),
+                event.getTitle()
+        );
+    }
 }
