@@ -81,10 +81,6 @@ public class CommentService {
     }
 
     private void deleteComment(Comment comment) {
-//        MapSqlParameterSource params = new MapSqlParameterSource();
-//        params.addValue("commentId", comment.getId());
-//
-//        jdbc.update("DELETE FROM comment_likes WHERE comment_id = :commentId", params);
         commentRepository.delete(comment);
     }
 
