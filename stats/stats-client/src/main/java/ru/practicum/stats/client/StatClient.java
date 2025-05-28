@@ -10,8 +10,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
-import ru.practicum.explore.stats.dto.StatsCreateDTO;
-import ru.practicum.explore.stats.dto.StatsRetDTO;
+import ru.practicum.stats.dto.StatsCreateDTO;
+import ru.practicum.stats.dto.StatsRetDTO;
 
 import java.util.List;
 

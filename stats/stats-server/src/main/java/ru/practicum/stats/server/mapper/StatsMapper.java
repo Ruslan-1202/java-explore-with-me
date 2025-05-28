@@ -1,8 +1,8 @@
 package ru.practicum.stats.server.mapper;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.explore.stats.dto.StatsCreateDTO;
-import ru.practicum.explore.stats.dto.StatsRetDTO;
+import ru.practicum.stats.dto.StatsCreateDTO;
+import ru.practicum.stats.dto.StatsRetDTO;
 import ru.practicum.stats.server.db.StatsEntity;
 
 @Service

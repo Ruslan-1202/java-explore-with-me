@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.explore.stats.dto.StatsRetDTO;
+import ru.practicum.stats.dto.StatsRetDTO;
 
 import java.time.LocalDateTime;
 

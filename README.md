@@ -1,7 +1,8 @@
-# Комментарии к событиям
-# PR
-https://github.com/Ruslan-1202/java-explore-with-me/pull/4
+# Приемы и фичи
+EventService - работа с jdbc  
+EventService::getAdminEvents - работа с QueryDSL
 
+# Комментарии к событиям
 ## Основная функциональность
 PRIVATE:  
 POST /users/{userId}/comments/{eventId} - создание комментария к событию  
